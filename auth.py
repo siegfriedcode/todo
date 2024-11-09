@@ -29,7 +29,8 @@ def register():
         if error is None:
             c.execute(
                 'insert into user (username, password) values (%s, %s)',
-                (username, generate_password_hash(password))
+                #(username, generate_password_hash(password, method="pbkdf2:sha256", iterations=260000))
+                (username, generate_password_hash(password, method="pbkdf2:sha256:260000"))
             )
             db.commit()
 
@@ -92,4 +93,4 @@ def login_required(view):
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))
